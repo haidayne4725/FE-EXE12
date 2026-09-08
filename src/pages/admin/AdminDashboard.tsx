@@ -1,0 +1,8 @@
+import { Boxes, CircleDollarSign, MessageSquareWarning, PackageCheck, Tags, Users } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Loading } from "../../components/Loading";
+import { dashboard, type Dashboard } from "../../services/adminService";
+import { formatMoney } from "../../utils/format";
+
+export function AdminDashboard() { const [data, setData] = useState<Dashboard | null>(null); useEffect(() => { dashboard().then(setData); }, []); if (!data) return <Loading />; const cards = [["Sản phẩm", data.products, Boxes], ["Danh mục", data.categories, Tags], ["Khách hàng", data.customers, Users], ["Đơn hàng", data.orders, PackageCheck], ["Review chờ duyệt", data.pendingReviews, MessageSquareWarning], ["Doanh thu đã thu", formatMoney(data.revenue), CircleDollarSign]] as const; return <><AdminHead title="Tổng quan cửa hàng" description="Dữ liệu trực tiếp từ Terrarium Shop API." /><div className="stat-grid">{cards.map(([label, value, Icon]) => <article key={label}><Icon /><span>{label}</span><strong>{value}</strong></article>)}</div><section className="panel admin-note"><h2>Cảnh báo vận hành</h2><p>Có <b>{data.lowStockProducts}</b> sản phẩm có tồn kho từ 3 trở xuống.</p><p>RAG chỉ trả lời từ product, policy và knowledge đã index; dùng trang RAG / AI để kiểm tra citation.</p></section></>; }
+export function AdminHead({ title, description, action }: { title: string; description?: string; action?: ReactNode }) { return <div className="admin-head"><div><span className="eyebrow">Tiệm Rêu Management</span><h1>{title}</h1>{description && <p>{description}</p>}</div>{action}</div>; }
