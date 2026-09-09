@@ -1,11 +1,259 @@
-import { Leaf } from "lucide-react";
-import { useState, type FormEvent, type ReactNode } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { forgotPassword, login, register, resetPassword } from "../services/authService";
-import { getApiMessage } from "../services/axiosClient";
+import { ArrowLeft, Mail, Lock, Eye, EyeOff, User, Phone, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { login, demoCustomer, demoAdmin } from "../services/authService";
 
-export function LoginPage() { const navigate = useNavigate(); const location = useLocation(); const [form, setForm] = useState({ email: "", password: "" }); const [message, setMessage] = useState(""); const [loading, setLoading] = useState(false); async function submit(event: FormEvent) { event.preventDefault(); setLoading(true); try { const auth = await login(form); const target = auth.user.role === "ADMIN" ? "/admin" : ((location.state as { from?: string } | null)?.from || "/"); navigate(target); } catch (error) { setMessage(getApiMessage(error)); } finally { setLoading(false); } } return <AuthShell title="Mừng bạn trở lại" subtitle="Đăng nhập để theo dõi đơn hàng và lịch chăm sóc."><form className="auth-form" onSubmit={submit}><label>Email<input required type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label><label>Mật khẩu<input required type="password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /></label><div className="auth-inline"><Link to="/forgot-password">Quên mật khẩu?</Link></div>{message && <p className="notice error">{message}</p>}<button disabled={loading} className="wide">{loading ? "Đang đăng nhập..." : "Đăng nhập"}</button><p>Chưa có tài khoản? <Link to="/register">Đăng ký</Link></p><small>Tài khoản mẫu: customer@tiemreu.vn / Customer@123</small></form></AuthShell>; }
-export function RegisterPage() { const navigate = useNavigate(); const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" }); const [message, setMessage] = useState(""); async function submit(event: FormEvent) { event.preventDefault(); try { await register(form); navigate("/"); } catch (error) { setMessage(getApiMessage(error)); } } return <AuthShell title="Gia nhập góc xanh" subtitle="Lưu sản phẩm yêu thích và nhận lịch chăm sóc sau mua."><form className="auth-form" onSubmit={submit}><label>Họ tên<input required value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></label><label>Email<input required type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label><label>Số điện thoại<input value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} /></label><label>Mật khẩu<input required minLength={6} type="password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /></label>{message && <p className="notice error">{message}</p>}<button className="wide">Tạo tài khoản</button><p>Đã có tài khoản? <Link to="/login">Đăng nhập</Link></p></form></AuthShell>; }
-export function ForgotPasswordPage() { const [email, setEmail] = useState(""); const [message, setMessage] = useState(""); const [token, setToken] = useState(""); async function submit(event: FormEvent) { event.preventDefault(); try { const response = await forgotPassword(email); setMessage(response.message); setToken(response.developmentToken || ""); } catch (error) { setMessage(getApiMessage(error)); } } return <AuthShell title="Khôi phục mật khẩu" subtitle="Nhập email đã đăng ký để tạo liên kết có hiệu lực trong một giờ."><form className="auth-form" onSubmit={submit}><label>Email<input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} /></label>{message && <p className="notice">{message}</p>}{token && <Link className="button wide" to={`/reset-password?token=${token}`}>Mở link reset local</Link>}<button className="wide">Gửi yêu cầu</button><p><Link to="/login">Quay lại đăng nhập</Link></p></form></AuthShell>; }
-export function ResetPasswordPage() { const navigate = useNavigate(); const location = useLocation(); const token = new URLSearchParams(location.search).get("token") || ""; const [password, setPassword] = useState(""); const [confirm, setConfirm] = useState(""); const [message, setMessage] = useState(""); async function submit(event: FormEvent) { event.preventDefault(); if (password !== confirm) return setMessage("Mật khẩu xác nhận chưa khớp"); try { const response = await resetPassword(token, password); setMessage(response.message); setTimeout(() => navigate("/login"), 900); } catch (error) { setMessage(getApiMessage(error)); } } return <AuthShell title="Đặt mật khẩu mới" subtitle="Liên kết chỉ dùng được một lần và hết hạn sau một giờ."><form className="auth-form" onSubmit={submit}><label>Mật khẩu mới<input required minLength={6} type="password" value={password} onChange={(event) => setPassword(event.target.value)} /></label><label>Xác nhận mật khẩu<input required minLength={6} type="password" value={confirm} onChange={(event) => setConfirm(event.target.value)} /></label>{message && <p className="notice">{message}</p>}<button disabled={!token} className="wide">Đổi mật khẩu</button><p><Link to="/forgot-password">Yêu cầu link khác</Link></p></form></AuthShell>; }
-function AuthShell({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) { return <main className="auth-page"><section className="auth-visual"><img src="/tiem_reu_cover_photo.png" alt="Tiệm Rêu" /><div><Leaf /><h2>Chạm vào một mảng xanh.</h2></div></section><section className="auth-panel"><Link to="/" className="brand"><img src="/logo.png" alt="" /><span>TIỆM RÊU</span></Link><div><span className="eyebrow">Tài khoản Tiệm Rêu</span><h1>{title}</h1><p>{subtitle}</p>{children}</div></section></main>; }
+export function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError("Vui lòng nhập đầy đủ email và mật khẩu.");
+      return;
+    }
+    try {
+      const res = await login({ email, password });
+      if (res && res.user) {
+        navigate(res.user.role === "ADMIN" ? "/admin" : "/");
+      }
+    } catch {
+      setError("Email hoặc mật khẩu không chính xác.");
+    }
+  };
+
+  const handleQuickDemoCustomer = () => {
+    demoCustomer();
+    navigate("/");
+  };
+
+  const handleQuickDemoAdmin = () => {
+    demoAdmin();
+    navigate("/admin");
+  };
+
+  return (
+    <main className="greenify-auth-page container">
+      <Link to="/" className="auth-back-link">
+        <ArrowLeft size={16} /> Quay lại trang chủ
+      </Link>
+
+      <div className="auth-card-container">
+        <div className="auth-brand-logo">Greenify</div>
+        <h1 className="auth-title">Chào mừng trở lại</h1>
+        <p className="auth-subtitle">Đăng nhập để tiếp tục mua sắm</p>
+
+        {error && <div className="auth-error-banner">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-input-group">
+            <label>Email</label>
+            <div className="input-with-icon">
+              <Mail size={18} className="input-icon" />
+              <input
+                type="email"
+                placeholder="email@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="auth-input-group">
+            <div className="label-row">
+              <label>Mật khẩu</label>
+              <Link to="/forgot-password" className="forgot-link">
+                Quên mật khẩu?
+              </Link>
+            </div>
+            <div className="input-with-icon">
+              <Lock size={18} className="input-icon" />
+              <input
+                type={showPass ? "text" : "password"}
+                placeholder="••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="eye-toggle-btn"
+                onClick={() => setShowPass((v) => !v)}
+              >
+                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" className="auth-primary-btn">
+            Đăng nhập
+          </button>
+        </form>
+
+        {/* DEMO QUICK LOGIN BUTTONS */}
+        <div className="demo-quick-login-box">
+          <span className="demo-label">Đăng nhập nhanh 1-Click:</span>
+          <div className="demo-btn-row">
+            <button type="button" className="demo-pill-btn customer" onClick={handleQuickDemoCustomer}>
+              <User size={14} /> Khách Hàng (Nguyễn Văn A)
+            </button>
+            <button type="button" className="demo-pill-btn admin" onClick={handleQuickDemoAdmin}>
+              <Sparkles size={14} /> Quản Trị Viên (Admin)
+            </button>
+          </div>
+        </div>
+
+        <div className="auth-footer-link">
+          Chưa có tài khoản? <Link to="/register"><strong>Đăng ký ngay</strong></Link>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export function RegisterPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    demoCustomer();
+    navigate("/");
+  };
+
+  return (
+    <main className="greenify-auth-page container">
+      <Link to="/" className="auth-back-link">
+        <ArrowLeft size={16} /> Quay lại trang chủ
+      </Link>
+
+      <div className="auth-card-container">
+        <div className="auth-brand-logo">Greenify</div>
+        <h1 className="auth-title">Đăng ký tài khoản</h1>
+        <p className="auth-subtitle">Tạo tài khoản để trải nghiệm dịch vụ Terrarium tốt nhất</p>
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-input-group">
+            <label>Họ và tên</label>
+            <div className="input-with-icon">
+              <User size={18} className="input-icon" />
+              <input
+                type="text"
+                placeholder="Nguyễn Văn A"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="auth-input-group">
+            <label>Email</label>
+            <div className="input-with-icon">
+              <Mail size={18} className="input-icon" />
+              <input
+                type="email"
+                placeholder="email@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="auth-input-group">
+            <label>Số điện thoại</label>
+            <div className="input-with-icon">
+              <Phone size={18} className="input-icon" />
+              <input
+                type="tel"
+                placeholder="0901234567"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="auth-input-group">
+            <label>Mật khẩu</label>
+            <div className="input-with-icon">
+              <Lock size={18} className="input-icon" />
+              <input
+                type="password"
+                placeholder="••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="auth-primary-btn">
+            Tạo tài khoản
+          </button>
+        </form>
+
+        <div className="auth-footer-link">
+          Đã có tài khoản? <Link to="/login"><strong>Đăng nhập ngay</strong></Link>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export function ForgotPasswordPage() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <main className="greenify-auth-page container">
+      <Link to="/login" className="auth-back-link">
+        <ArrowLeft size={16} /> Quay lại đăng nhập
+      </Link>
+
+      <div className="auth-card-container">
+        <div className="auth-brand-logo">Greenify</div>
+        <h1 className="auth-title">Quên mật khẩu</h1>
+        <p className="auth-subtitle">Nhập email để nhận liên kết khôi phục mật khẩu</p>
+
+        {submitted ? (
+          <div className="auth-success-banner">
+            Đã gửi liên kết khôi phục tới <strong>{email}</strong>. Vui lòng kiểm tra hộp thư đến của bạn.
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="auth-input-group">
+              <label>Email</label>
+              <div className="input-with-icon">
+                <Mail size={18} className="input-icon" />
+                <input
+                  type="email"
+                  placeholder="email@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <button type="submit" className="auth-primary-btn">
+              Gửi liên kết khôi phục
+            </button>
+          </form>
+        )}
+      </div>
+    </main>
+  );
+}

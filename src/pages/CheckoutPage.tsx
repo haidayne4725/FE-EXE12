@@ -1,27 +1,223 @@
-import { CheckCircle2, Ticket } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { ArrowLeft, Truck, Banknote } from "lucide-react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { currentUser } from "../services/authService";
-import { createOrder, validateVoucher } from "../services/commerceService";
-import { getApiMessage } from "../services/axiosClient";
-import type { Order, VoucherValidation } from "../types/commerce";
 import { formatMoney } from "../utils/format";
 
 export function CheckoutPage() {
-  const { items, subtotal, clear } = useCart(); const navigate = useNavigate(); const user = currentUser();
-  const [form, setForm] = useState({ name: user?.name || "", phone: user?.phone || "", email: user?.email || "", province: "", district: "", ward: "", fullAddress: "" });
-  const [voucherCode, setVoucherCode] = useState(""); const [voucher, setVoucher] = useState<VoucherValidation | null>(null);
-  const [shippingMethod, setShippingMethod] = useState("GHN_STANDARD"); const [paymentMethod, setPaymentMethod] = useState("COD");
-  const [loading, setLoading] = useState(false); const [message, setMessage] = useState(""); const [created, setCreated] = useState<Order | null>(null);
-  if (!items.length && !created) return <main className="page container"><div className="empty-state"><h2>Không có sản phẩm để thanh toán</h2><Link className="button" to="/products">Chọn sản phẩm</Link></div></main>;
-  async function applyVoucher() { try { const result = await validateVoucher(voucherCode, items.map((item) => ({ productId: item.product.id, quantity: item.quantity, variants: item.variants }))); setVoucher(result); setMessage(result.valid ? "Voucher hợp lệ" : result.error || "Voucher không hợp lệ"); } catch (error) { setMessage(getApiMessage(error)); } }
-  async function submit(event: FormEvent) { event.preventDefault(); setLoading(true); setMessage(""); try { const order = await createOrder({ items: items.map((item) => ({ productId: item.product.id, quantity: item.quantity, variants: item.variants })), shippingInfo: form, shippingMethod, paymentMethod, discountCode: voucher?.valid ? voucherCode : undefined }); setCreated(order); clear(); if (user) setTimeout(() => navigate(`/orders/${order.id}`), 1200); } catch (error) { setMessage(getApiMessage(error)); } finally { setLoading(false); } }
-  if (created) return <main className="center-page"><div className="success-card"><CheckCircle2 /><h1>Đặt hàng thành công</h1><p>Mã đơn: <b>{created.orderNumber}</b></p><p>Tổng thanh toán: {formatMoney(created.total)}</p><Link className="button" to={`/orders/${created.id}?orderNumber=${created.orderNumber}`}>Xem đơn hàng</Link></div></main>;
-  const shipping = shippingMethod === "GHN_STANDARD" ? 30000 : shippingMethod === "GHN_EXPRESS" ? 45000 : 60000;
-  const total = subtotal + (voucher?.freeShipping ? 0 : shipping) - (voucher?.valid ? voucher.discountAmount : 0);
-  return <main className="page container"><div className="page-title left"><span className="eyebrow">Thanh toán an toàn</span><h1>Thông tin nhận hàng</h1></div><form className="checkout-layout" onSubmit={submit}><div className="checkout-form"><section className="panel"><h2>Liên hệ & địa chỉ</h2><div className="form-grid"><label>Họ tên<input required value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></label><label>Số điện thoại<input required value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} /></label><label>Email<input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label><label>Tỉnh/Thành<input value={form.province} onChange={(event) => setForm({ ...form, province: event.target.value })} /></label><label>Quận/Huyện<input value={form.district} onChange={(event) => setForm({ ...form, district: event.target.value })} /></label><label>Phường/Xã<input value={form.ward} onChange={(event) => setForm({ ...form, ward: event.target.value })} /></label><label className="full">Địa chỉ chi tiết<textarea required value={form.fullAddress} onChange={(event) => setForm({ ...form, fullAddress: event.target.value })} /></label></div></section>
-    <section className="panel"><h2>Vận chuyển</h2>{[["GHN_STANDARD", "GHN tiêu chuẩn · 30.000đ"], ["GHN_EXPRESS", "GHN nhanh · 45.000đ"], ["GRAB", "Hỏa tốc nội thành · 60.000đ"]].map(([value, label]) => <label className="radio-row" key={value}><input type="radio" checked={shippingMethod === value} onChange={() => setShippingMethod(value)} />{label}</label>)}</section>
-    <section className="panel"><h2>Thanh toán</h2>{[["COD", "Thanh toán khi nhận hàng"], ["BANK_TRANSFER", "Chuyển khoản ngân hàng"], ["MOMO", "Ví MoMo (cần cấu hình cổng thanh toán)"]].map(([value, label]) => <label className="radio-row" key={value}><input type="radio" checked={paymentMethod === value} onChange={() => setPaymentMethod(value)} />{label}</label>)}</section></div>
-    <aside className="order-summary"><h2>Đơn hàng</h2>{items.map((item) => <div key={item.key}><span>{item.product.name} × {item.quantity}</span><b>{formatMoney(item.unitPrice * item.quantity)}</b></div>)}<label className="voucher-input"><Ticket /><input value={voucherCode} onChange={(event) => setVoucherCode(event.target.value.toUpperCase())} placeholder="Mã voucher" /><button type="button" onClick={applyVoucher}>Áp dụng</button></label>{message && <p className={voucher?.valid ? "notice success" : "notice"}>{message}</p>}<hr /><div><span>Tạm tính</span><b>{formatMoney(subtotal)}</b></div><div><span>Vận chuyển</span><b>{voucher?.freeShipping ? "Miễn phí" : formatMoney(shipping)}</b></div>{voucher?.valid && <div><span>Giảm giá</span><b>-{formatMoney(voucher.discountAmount)}</b></div>}<div className="total"><span>Tổng cộng</span><strong>{formatMoney(total)}</strong></div><button disabled={loading} className="wide" type="submit">{loading ? "Đang tạo đơn..." : "Đặt hàng"}</button></aside></form></main>;
+  const { items, subtotal, clear } = useCart();
+  const user = currentUser();
+  const navigate = useNavigate();
+
+  const [address, setAddress] = useState("32/16 Tam Đa, P. Long Trường");
+  const [city, setCity] = useState("TP. Hồ Chí Minh");
+  const [district, setDistrict] = useState("Quận 9");
+  const [ward, setWard] = useState("Phường 5");
+
+  const [shippingMethod, setShippingMethod] = useState<"standard" | "express">("standard");
+  const [paymentMethod, setPaymentMethod] = useState<"cod" | "banking">("cod");
+
+  const shippingFee = shippingMethod === "standard" ? 30000 : 50000;
+  const totalAmount = subtotal + shippingFee;
+
+  const handlePlaceOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+    const orderData = {
+      code: "GREENIFY - 0001",
+      date: new Date().toLocaleString("vi-VN"),
+      receiver: user ? user.name : "Nguyễn Văn A",
+      paymentType: paymentMethod === "cod" ? "COD" : "Ngân hàng",
+      items,
+      subtotal,
+      shippingFee,
+      totalAmount,
+    };
+    localStorage.setItem("latest-greenify-order", JSON.stringify(orderData));
+    clear();
+    navigate("/order-success");
+  };
+
+  return (
+    <main className="greenify-checkout-page container">
+      <Link to="/" className="auth-back-link">
+        <ArrowLeft size={16} /> Quay lại trang chủ
+      </Link>
+
+      <h1 className="checkout-title">Thanh toán</h1>
+
+      <form onSubmit={handlePlaceOrder} className="checkout-layout">
+        {/* LEFT CARDS */}
+        <div className="checkout-left-col">
+          {/* CARD 1: ADDRESS */}
+          <div className="checkout-card">
+            <div className="checkout-card-header">
+              <Truck size={20} /> <h2>Địa chỉ giao hàng</h2>
+            </div>
+
+            <div className="form-group">
+              <label>Địa chỉ *</label>
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Số nhà, tên đường"
+                required
+              />
+            </div>
+
+            <div className="form-row-2">
+              <div className="form-group">
+                <label>Tỉnh / Thành Phố *</label>
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Quận / Huyện *</label>
+                <input
+                  type="text"
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Phường / Xã *</label>
+              <input
+                type="text"
+                value={ward}
+                onChange={(e) => setWard(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          {/* CARD 2: SHIPPING METHOD */}
+          <div className="checkout-card">
+            <div className="checkout-card-header">
+              <Truck size={20} /> <h2>Phương thức vận chuyển</h2>
+            </div>
+
+            <div className="shipping-options">
+              <label className={`radio-option-card ${shippingMethod === "standard" ? "selected" : ""}`}>
+                <input
+                  type="radio"
+                  name="shipping"
+                  checked={shippingMethod === "standard"}
+                  onChange={() => setShippingMethod("standard")}
+                />
+                <div className="radio-content">
+                  <strong>Giao hàng tiêu chuẩn</strong>
+                  <span>3-5 ngày làm việc</span>
+                </div>
+                <span className="radio-price">30.000đ</span>
+              </label>
+
+              <label className={`radio-option-card ${shippingMethod === "express" ? "selected" : ""}`}>
+                <input
+                  type="radio"
+                  name="shipping"
+                  checked={shippingMethod === "express"}
+                  onChange={() => setShippingMethod("express")}
+                />
+                <div className="radio-content">
+                  <strong>Giao hàng nhanh</strong>
+                  <span>1 -2 ngày làm việc</span>
+                </div>
+                <span className="radio-price">50.000đ</span>
+              </label>
+            </div>
+          </div>
+
+          {/* CARD 3: PAYMENT METHOD */}
+          <div className="checkout-card">
+            <div className="checkout-card-header">
+              <Banknote size={20} /> <h2>Phương thức thanh toán</h2>
+            </div>
+
+            <div className="payment-options">
+              <label className={`radio-option-card ${paymentMethod === "cod" ? "selected" : ""}`}>
+                <input
+                  type="radio"
+                  name="payment"
+                  checked={paymentMethod === "cod"}
+                  onChange={() => setPaymentMethod("cod")}
+                />
+                <div className="radio-content">
+                  <strong>Thanh toán khi nhận hàng (COD)</strong>
+                  <span>Thanh toán tiền mặt</span>
+                </div>
+                <span className="radio-price">30.000đ</span>
+              </label>
+
+              <label className={`radio-option-card ${paymentMethod === "banking" ? "selected" : ""}`}>
+                <input
+                  type="radio"
+                  name="payment"
+                  checked={paymentMethod === "banking"}
+                  onChange={() => setPaymentMethod("banking")}
+                />
+                <div className="radio-content">
+                  <strong>Thanh toán bằng ngân hàng</strong>
+                  <span>Chuyển khoản hoặc thanh toán bằng Visa</span>
+                </div>
+                <span className="radio-price">50.000đ</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN SUMMARY */}
+        <div className="checkout-right-col">
+          <div className="checkout-summary-card">
+            <h2 className="summary-title">Tổng đơn hàng</h2>
+
+            <div className="checkout-items-preview">
+              {items.map((item) => (
+                <div key={item.key} className="preview-item">
+                  <img
+                    src={item.product.images[0] || "/greenify/103030178d272cf117fd67a3e50134fb539ff7d8.png"}
+                    alt={item.product.name}
+                  />
+                  <div className="preview-info">
+                    <h4>{item.product.name}</h4>
+                    <span>Phân loại: {Object.values(item.variants)[0] || "Gói cơ bản"}</span>
+                    <span>Số lượng: {item.quantity}</span>
+                    <strong className="preview-price">{formatMoney(item.unitPrice * item.quantity)}</strong>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="summary-rows">
+              <div className="summary-row">
+                <span>Tạm tính</span>
+                <span>{formatMoney(subtotal)}</span>
+              </div>
+              <div className="summary-row">
+                <span>Phí vận chuyển</span>
+                <span>{formatMoney(shippingFee)}</span>
+              </div>
+            </div>
+
+            <div className="summary-total-row">
+              <span>Tổng cộng</span>
+              <span className="total-amount">{formatMoney(totalAmount)}</span>
+            </div>
+          </div>
+
+          <button type="submit" className="place-order-btn">
+            Đặt hàng
+          </button>
+        </div>
+      </form>
+    </main>
+  );
 }
