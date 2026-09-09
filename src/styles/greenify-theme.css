@@ -1,0 +1,53 @@
+/* GREENIFY DESIGN SYSTEM TOKENS */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Brand Primary & Secondary Palette */
+  --greenify-main-color: #38442D;
+  --greenify-sub-color: #2D3724;
+  --greenify-sub-color-2: #48573A;
+  --greenify-icon: #5F6D52;
+  --greenify-stroke-bottom: #788D65;
+  --greenify-frame-2: #D6DECD;
+  --greenify-bg: #F6F7F3;
+  --greenify-frame-1: #FFFFFF;
+  --greenify-bottom-1: #FAFFF1;
+  --greenify-bottom-2: #637258;
+  --greenify-mask: #212A1A;
+  
+  /* Text & Neutral Shades */
+  --greenify-base-black: #1A2118;
+  --greenify-location-rate: #5C6556;
+  --greenify-sub-title: #8C9685;
+  --greenify-text-light: #70756B;
+  
+  /* Accents & Special States */
+  --greenify-rate-icon: #F3CB4B;
+  --greenify-discount: #D93636;
+  --greenify-success: #33D306;
+  --greenify-warning: #EF8F4A;
+  
+  /* Iris Purple Accent Palette (Special Badges / Highlights) */
+  --greenify-iris-bg: #F1EDFE;
+  --greenify-iris-light: #D5C7FC;
+  --greenify-iris-border: #C0ACFB;
+  --greenify-iris-primary: #8047FF;
+  
+  /* Typography & Shadows */
+  --font-family-logo: 'Great Vibes', cursive;
+  --font-family-sans: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  
+  --shadow-sm: 0 2px 8px rgba(56, 68, 45, 0.06);
+  --shadow-md: 0 4px 16px rgba(56, 68, 45, 0.1);
+  --shadow-lg: 0 10px 30px rgba(56, 68, 45, 0.14);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
