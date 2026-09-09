@@ -1,11 +1,108 @@
-import { CheckCircle2, Circle, Package, Truck } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
-import { Loading } from "../components/Loading";
-import { cancelOrder, getOrder } from "../services/commerceService";
-import { getApiMessage } from "../services/axiosClient";
-import type { Order } from "../types/commerce";
-import { formatDate, formatMoney } from "../utils/format";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { formatMoney } from "../utils/format";
 
-const steps = ["PENDING", "CONFIRMED", "PROCESSING", "SHIPPING", "DELIVERED"];
-export function OrderDetailPage() { const { id = "" } = useParams(); const [query] = useSearchParams(); const [order, setOrder] = useState<Order | null>(null); const [message, setMessage] = useState(""); useEffect(() => { getOrder(id, query.get("orderNumber") || undefined).then(setOrder).catch((error) => setMessage(getApiMessage(error))); }, [id, query]); if (!order) return <main className="page container">{message || <Loading />}</main>; const activeIndex = steps.indexOf(order.status); return <main className="page container"><div className="order-detail-head"><div><span className="eyebrow">Chi tiết đơn hàng</span><h1>{order.orderNumber}</h1><p>Đặt lúc {formatDate(order.createdAt)}</p></div><span className={`status ${order.status.toLowerCase()}`}>{order.status}</span></div><div className="timeline">{steps.map((step, index) => <div className={index <= activeIndex ? "done" : ""} key={step}>{index < activeIndex ? <CheckCircle2 /> : index === activeIndex ? <Truck /> : <Circle />}<span>{step}</span></div>)}</div><div className="checkout-layout"><div><section className="panel"><h2>Sản phẩm</h2>{order.items.map((item) => <div className="order-line" key={item.id}><img src={item.productImage || "/logo.png"} alt="" /><div className="grow"><b>{item.productName}</b><span>Số lượng: {item.quantity}</span></div><strong>{formatMoney(item.price * item.quantity)}</strong></div>)}</section><section className="panel"><h2>Giao hàng</h2><p><Package /> {order.shippingInfo?.name} · {order.shippingInfo?.phone}</p><p>{order.shippingInfo?.fullAddress}, {order.shippingInfo?.ward}, {order.shippingInfo?.district}, {order.shippingInfo?.province}</p></section></div><aside className="order-summary"><h2>Thanh toán</h2><div><span>Tạm tính</span><b>{formatMoney(order.subtotal)}</b></div><div><span>Phí giao</span><b>{formatMoney(order.shippingFee)}</b></div><div><span>Giảm giá</span><b>-{formatMoney(order.discount)}</b></div><hr /><div className="total"><span>Tổng</span><strong>{formatMoney(order.total)}</strong></div><p>{order.paymentMethod} · {order.paymentStatus}</p>{["PENDING", "CONFIRMED"].includes(order.status) && <button className="outline danger" onClick={async () => setOrder(await cancelOrder(order.id))}>Hủy đơn</button>}</aside></div></main>; }
+export function OrderSuccessPage() {
+  const rawOrder = localStorage.getItem("latest-greenify-order");
+  const order = rawOrder
+    ? JSON.parse(rawOrder)
+    : {
+        code: "GREENIFY - 0001",
+        date: "12:08:56 - 04/07/2026",
+        receiver: "Nguyễn Văn A",
+        paymentType: "COD",
+        items: [
+          {
+            product: { name: "Bể bậc thang tịnh tâm" },
+            quantity: 1,
+            unitPrice: 950000,
+          },
+        ],
+        subtotal: 950000,
+        shippingFee: 30000,
+        totalAmount: 980000,
+      };
+
+  return (
+    <main className="greenify-success-page container">
+      <Link to="/" className="auth-back-link">
+        <ArrowLeft size={16} /> Quay lại trang chủ
+      </Link>
+
+      <div className="success-header">
+        <div className="success-check-icon">
+          <CheckCircle2 size={64} />
+        </div>
+        <h1 className="success-title">Đặt hàng thành công</h1>
+        <p className="success-subtitle">Cảm ơn bạn đã mua hàng tại Greenify</p>
+      </div>
+
+      <div className="order-invoice-card">
+        <div className="invoice-meta-row">
+          <div>
+            <span className="meta-label">Mã đơn hàng:</span>
+            <strong className="order-code">{order.code}</strong>
+          </div>
+        </div>
+
+        <div className="invoice-meta-row">
+          <div>
+            <span className="meta-label">Ngày đặt:</span>
+            <div className="meta-val">{order.date}</div>
+          </div>
+        </div>
+
+        <div className="invoice-receiver-row">
+          <div>
+            <span className="meta-label">Người nhận:</span>
+            <strong className="receiver-name">{order.receiver}</strong>
+          </div>
+          <div className="text-right">
+            <span className="meta-label">Thanh toán:</span>
+            <strong className="payment-type">{order.paymentType}</strong>
+          </div>
+        </div>
+
+        <div className="invoice-products-section">
+          <span className="meta-label">Sản phẩm:</span>
+          {order.items?.map((it: any, i: number) => (
+            <div key={i} className="invoice-item-row">
+              <span className="item-name-qty">
+                <strong>{it.product?.name}</strong> x{it.quantity}
+              </span>
+              <span className="item-total">{formatMoney(it.unitPrice * it.quantity)}</span>
+            </div>
+          ))}
+        </div>
+
+        <hr className="invoice-divider" />
+
+        <div className="invoice-calc-rows">
+          <div className="calc-row">
+            <span>Tạm tính</span>
+            <span>{formatMoney(order.subtotal)}</span>
+          </div>
+          <div className="calc-row">
+            <span>Phí vận chuyển</span>
+            <span>{formatMoney(order.shippingFee)}</span>
+          </div>
+          <div className="calc-row">
+            <span>Giảm giá</span>
+            <span>0đ</span>
+          </div>
+        </div>
+
+        <div className="invoice-total-row">
+          <span>Tổng cộng</span>
+          <span className="total-val">{formatMoney(order.totalAmount)}</span>
+        </div>
+      </div>
+
+      <div className="success-actions-row">
+        <Link to="/" className="success-btn light">Về trang chủ</Link>
+        <Link to="/products" className="success-btn dark">Tiếp tục mua sắm</Link>
+        <Link to="/orders" className="success-btn light">Theo dõi đơn hàng</Link>
+      </div>
+    </main>
+  );
+}
