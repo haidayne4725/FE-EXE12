@@ -1,25 +1,25 @@
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
     <>
-      <footer className="greenify-site-footer">
-        <div className="footer-container">
+      <footer className="greenify-site-footer-clean">
+        <div className="footer-container-clean">
           {/* COLUMN 1: BRAND LOGO & BIO */}
           <div className="footer-col brand-col">
-            <Link to="/" className="footer-logo">
-              Greenify
+            <Link to="/" className="footer-logo-clean">
+              greenify
             </Link>
-            <p className="footer-bio">
+            <p className="footer-bio-clean">
               Terrarium thủ công mang thiên nhiên vào không gian sống của bạn. Mỗi sản phẩm là một hệ sinh thái thu nhỏ, được tạo tính tỉ mỉ.
             </p>
           </div>
 
           {/* COLUMN 2: KHÁM PHÁ */}
           <div className="footer-col">
-            <h4 className="footer-heading">Khám phá</h4>
-            <ul className="footer-links">
+            <h4 className="footer-heading-clean">Khám phá</h4>
+            <ul className="footer-links-clean">
               <li><Link to="/products">Tất cả sản phẩm</Link></li>
               <li><Link to="/explore">Được chọn tuần này</Link></li>
               <li><Link to="/blog">Blog & Kiến thức</Link></li>
@@ -29,19 +29,18 @@ export function Footer() {
 
           {/* COLUMN 3: LIÊN HỆ */}
           <div className="footer-col">
-            <h4 className="footer-heading">Liên hệ</h4>
-            <ul className="footer-contact-list">
+            <h4 className="footer-heading-clean">Liên hệ</h4>
+            <ul className="footer-contact-list-clean">
               <li><Mail size={16} /> <span>greenify.com.vn@gmail.com</span></li>
               <li><Phone size={16} /> <span>0706 668 296</span></li>
-              <li><MapPin size={16} /> <span>32/16 Tam Đa, P. Long Trường, TP. Hồ Chí Minh</span></li>
               <li><Clock size={16} /> <span>Thứ 2 - Chủ nhật, 9:00 - 21:00</span></li>
             </ul>
           </div>
 
           {/* COLUMN 4: CHÍNH SÁCH */}
           <div className="footer-col">
-            <h4 className="footer-heading">Chính sách</h4>
-            <ul className="footer-links">
+            <h4 className="footer-heading-clean">Chính sách</h4>
+            <ul className="footer-links-clean">
               <li><Link to="/policies?tab=warranty">Bảo hành</Link></li>
               <li><Link to="/policies?tab=shipping">Vận chuyển</Link></li>
               <li><Link to="/policies?tab=return">Đổi trả</Link></li>
