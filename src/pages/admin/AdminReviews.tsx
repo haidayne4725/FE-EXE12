@@ -32,7 +32,7 @@ export function AdminReviews() {
       ) : items.length ? (
         <div className="review-admin-list">
           {items.map((review) => (
-            <article className="panel" key={review.id} style={{ borderLeft: "5px solid #F59E0B" }}>
+            <article className="panel" key={review.id} style={{ borderLeft: "5px solid var(--greenify-rate-icon)" }}>
               <div className="review-admin-head">
                 <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
                   <div
@@ -40,8 +40,8 @@ export function AdminReviews() {
                       width: "42px",
                       height: "42px",
                       borderRadius: "50%",
-                      background: "#EEF2EB",
-                      color: "#47553E",
+                      background: "var(--greenify-stat-icon-bg)",
+                      color: "var(--greenify-stat-icon-color)",
                       fontWeight: 800,
                       display: "grid",
                       placeItems: "center",
@@ -53,13 +53,13 @@ export function AdminReviews() {
 
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <b style={{ fontSize: "1rem", color: "#1C2518" }}>{review.customerName}</b>
-                      <span className="badge-tag" style={{ background: "#DCFCE7", color: "#166534", fontSize: "0.72rem" }}>
+                      <b style={{ fontSize: "1rem", color: "var(--greenify-text-dark)" }}>{review.customerName}</b>
+                      <span className="badge-tag" style={{ background: "#DCFCE7", color: "var(--greenify-positive)", fontSize: "0.72rem" }}>
                         <UserCheck size={11} /> Đã Mua Hàng
                       </span>
                     </div>
-                    <span style={{ fontSize: "0.82rem", color: "#66705E" }}>
-                      Sản phẩm: <strong style={{ color: "#252E1F" }}>{review.productName}</strong> · {formatDate(review.createdAt)}
+                    <span style={{ fontSize: "0.82rem", color: "var(--greenify-text-muted)" }}>
+                      Sản phẩm: <strong style={{ color: "var(--greenify-input-label)" }}>{review.productName}</strong> · {formatDate(review.createdAt)}
                     </span>
                   </div>
                 </div>
@@ -69,27 +69,28 @@ export function AdminReviews() {
                     <Star
                       key={starIndex}
                       size={18}
-                      fill={starIndex <= review.rating ? "#F59E0B" : "none"}
-                      color={starIndex <= review.rating ? "#F59E0B" : "#D1D5DB"}
+                      fill={starIndex <= review.rating ? "var(--greenify-rate-icon)" : "none"}
+                      color={starIndex <= review.rating ? "var(--greenify-rate-icon)" : "var(--greenify-frame-2)"}
                     />
                   ))}
                 </div>
               </div>
 
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#1C2518", margin: "0.75rem 0 0.4rem" }}>{review.title}</h3>
-              <p style={{ fontSize: "0.95rem", color: "#374151", margin: "0 0 1.25rem", lineHeight: 1.6 }}>{review.content}</p>
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--greenify-text-dark)", margin: "0.75rem 0 0.4rem" }}>{review.title}</h3>
+              <p style={{ fontSize: "0.95rem", color: "var(--greenify-text-light)", margin: "0 0 1.25rem", lineHeight: 1.6 }}>{review.content}</p>
 
               <div style={{ display: "flex", gap: "0.75rem" }}>
                 <button
                   onClick={() => moderate(review.id, true)}
-                  style={{ background: "#166534", color: "#ffffff", padding: "0.55rem 1.25rem", borderRadius: "8px", fontWeight: 700 }}
+                  className="admin-btn-primary"
+                  style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem" }}
                 >
                   <Check size={16} /> Duyệt Đánh Giá
                 </button>
                 <button
-                  className="outline danger"
                   onClick={() => moderate(review.id, false)}
-                  style={{ padding: "0.55rem 1.25rem", borderRadius: "8px", fontWeight: 700 }}
+                  className="icon-button danger"
+                  style={{ width: "auto", height: "auto", padding: "0.55rem 1.25rem", borderRadius: "8px", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: "0.4rem" }}
                 >
                   <X size={16} /> Từ Chối
                 </button>
@@ -103,4 +104,3 @@ export function AdminReviews() {
     </>
   );
 }
-

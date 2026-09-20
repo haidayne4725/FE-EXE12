@@ -193,7 +193,7 @@ export function AdminVouchers() {
                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.4rem", flexWrap: "wrap" }}>
                       <span
                         style={{
-                          background: "#EEF2EB",
+                          background: "var(--greenify-stat-icon-bg)",
                           color: "var(--greenify-main-color)",
                           fontWeight: 800,
                           fontSize: "1.05rem",
@@ -208,8 +208,8 @@ export function AdminVouchers() {
                       <span
                         className="badge-tag"
                         style={{
-                          background: item.type === "PERCENTAGE" ? "var(--greenify-iris-bg)" : "#E0F2FE",
-                          color: item.type === "PERCENTAGE" ? "var(--greenify-iris-primary)" : "#0369A1",
+                          background: item.type === "PERCENTAGE" ? "var(--greenify-stat-icon-bg)" : "#E0F2FE",
+                          color: item.type === "PERCENTAGE" ? "var(--greenify-main-color)" : "#0369A1",
                         }}
                       >
                         {item.type === "PERCENTAGE" ? (
