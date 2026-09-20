@@ -80,6 +80,81 @@
   ],
   "products": [
     {
+      "id": "prod_7",
+      "slug": "be-mini-totoro-trong-khu-vuon-day-hoa",
+      "name": "Bể Mini Totoro trong khu vườn đầy hoa",
+      "description": "Thiết kế bể kính khép kín với chú Totoro nhỏ xinh bên thảm rêu nhung và cỏ hoa rực rỡ.",
+      "basePrice": 490000,
+      "salePrice": 390000,
+      "effectivePrice": 390000,
+      "type": "PRODUCT",
+      "inventory": 12,
+      "featured": true,
+      "categoryId": "cat_basic",
+      "categoryName": "BỂ BASIC",
+      "status": "ACTIVE",
+      "images": ["/greenify/97b7f436004c6a56ec301716256a4cf629b561d9.png"],
+      "size": "15x15x20cm",
+      "setupStatus": "READY_TO_DISPLAY",
+      "careLevel": "EASY",
+      "chatTags": ["totoro", "bể basic", "khép kín"],
+      "rating": 0,
+      "reviewCount": 0,
+      "voteCount": 150,
+      "hasVersions": true,
+      "variants": ["Cơ bản", "Tiêu chuẩn", "Nâng cao"]
+    },
+    {
+      "id": "prod_8",
+      "slug": "be-cay-co-don",
+      "name": "Bể cây cô đơn",
+      "description": "Bể kính dáng vuông tối giản với cây bonsai nhỏ nhắn đứng độc bản trên ngọn đồi rêu xanh.",
+      "basePrice": 690000,
+      "salePrice": 650000,
+      "effectivePrice": 650000,
+      "type": "PRODUCT",
+      "inventory": 8,
+      "featured": true,
+      "categoryId": "cat_basic",
+      "categoryName": "BỂ BASIC",
+      "status": "ACTIVE",
+      "images": ["/greenify/97b7f436004c6a56ec301716256a4cf629b561d9.png"],
+      "size": "20x20x25cm",
+      "setupStatus": "READY_TO_DISPLAY",
+      "careLevel": "EASY",
+      "chatTags": ["cây cô đơn", "bonsai", "bể basic"],
+      "rating": 0,
+      "reviewCount": 0,
+      "voteCount": 120,
+      "hasVersions": true,
+      "variants": ["Cơ bản", "Tiêu chuẩn", "Nâng cao"]
+    },
+    {
+      "id": "prod_9",
+      "slug": "loi-nho",
+      "name": "Lối nhỏ",
+      "description": "Tiểu cảnh con đường nhỏ lát đá giữa rừng rêu xanh thẳm mang lại cảm giác bình yên.",
+      "basePrice": 490000,
+      "salePrice": 390000,
+      "effectivePrice": 390000,
+      "type": "PRODUCT",
+      "inventory": 15,
+      "featured": true,
+      "categoryId": "cat_basic",
+      "categoryName": "BỂ BASIC",
+      "status": "ACTIVE",
+      "images": ["/greenify/97b7f436004c6a56ec301716256a4cf629b561d9.png"],
+      "size": "18x18x20cm",
+      "setupStatus": "READY_TO_DISPLAY",
+      "careLevel": "EASY",
+      "chatTags": ["lối nhỏ", "tiểu cảnh", "bể basic"],
+      "rating": 0,
+      "reviewCount": 0,
+      "voteCount": 88,
+      "hasVersions": true,
+      "variants": ["Cơ bản", "Tiêu chuẩn", "Nâng cao"]
+    },
+    {
       "id": "prod_1",
       "slug": "foam-tao-bo-cuc",
       "name": "Foam tạo bố cục",
@@ -398,7 +473,7 @@
         "Những nét vẽ chắp vá, những ý tưởng non nớt ban đầu giờ đây đã hiện diện sắc nét bằng xương bằng thịt. Chúng không chỉ là những mẩu giấy đính kèm vô tri, mà là minh chứng sống động cho việc: Khi bạn đủ đam mê, mọi giới hạn về kỹ năng đều có thể bị phá vỡ. Khởi nghiệp chưa bao giờ là một con đường dễ dàng, nhất là với những sinh viên đi lên từ hai bàn tay trắng. Nhưng với sự chân thành, tinh thần tự học hỏi và tâm huyết đặt vào từng chi tiết nhỏ nhất, tin chắc rằng, không gian xanh của tiệm Rêu Decor sẽ còn vươn rễ sâu và phát triển mạnh mẽ hơn nữa trên chặng đường phía trước."
       ],
       "publishDate": "11/06/2026",
-      "image": "/greenify/c6a87256fa949891e9cf356521ec0225f54a0ae5.png",
+      "image": "/greenify/734a0997040762e24d02e207e576dc443f034315.png",
       "readTime": "5 min"
     },
     {
@@ -415,7 +490,7 @@
         "Kết bài: Làm chủ ánh sáng, làm chủ mảng xanh\n\nÁnh sáng không chỉ đơn thuần là việc bật một chiếc công tắc; nó là một môn khoa học giúp tái hiện lại sự kỳ diệu của tự nhiên ngay trên bàn làm việc của bạn. Hiểu được các thông số như Kelvin, PAR hay cách chọn công suất đèn 3W, 5W, 7W chính là chìa khóa để bạn giữ cho thế giới thu nhỏ của mình luôn khỏe mạnh. Quá trình thiết kế một chiếc Terrarium luôn cần sự giao thoa giữa nghệ thuật sắp đặt và sự tính toán kỹ thuật chuẩn xác, để mỗi mảng rêu khi đến tay bạn đều nhận được môi trường sinh trưởng hoàn hảo nhất."
       ],
       "publishDate": "06/06/2026",
-      "image": "/greenify/a7a9f76d6fd54e425bb087c1ee42d5900eb48b42.png",
+      "image": "/greenify/387537d33740798cf6e3aadfc78e2d65c482a6ed.png",
       "readTime": "4 min"
     },
     {
@@ -438,7 +513,7 @@
         "Dù bạn là ai, mong rằng khi nhìn vào những chiếc bể kín của Tiệm Rêu, bạn không chỉ thấy một góc thiên nhiên thu nhỏ, mà còn cảm nhận được sự nỗ lực, tinh thần không bỏ cuộc và sự chân thành mà chúng tôi gửi gắm. Cảm ơn bạn vì đã ở đây và lắng nghe câu chuyện này!"
       ],
       "publishDate": "06/06/2026",
-      "image": "/greenify/6fee9a819eee920f9fe2d46d2570301186b1ea7e.png",
+      "image": "/greenify/3c4f8aa0c339be2a247e2a3e23bae68c9c8a15d8.png",
       "readTime": "6 min"
     }
   ],

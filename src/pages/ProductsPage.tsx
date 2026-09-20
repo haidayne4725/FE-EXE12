@@ -1,6 +1,6 @@
 import { Search, SlidersHorizontal, ArrowRight } from "lucide-react";
 import { useState, useMemo } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { ProductCard } from "../components/ProductCard";
 import type { Product } from "../types/catalog";
 import mockData from "../mock/mockData.json";
@@ -129,9 +129,9 @@ export function ProductsPage() {
           <p>
             Greenify cung cấp dịch vụ thiết kế Terrarium theo yêu cầu riêng của bạn. Đội ngũ nghệ nhân sẽ hỗ trợ lên ý tưởng và hiện thực hóa mảng xanh lý tưởng.
           </p>
-          <Link to="/consult" className="custom-cta-btn">
+          <a href="https://zalo.me/0706668296" target="_blank" rel="noopener noreferrer" className="custom-cta-btn">
             Nhận tư vấn ngay <ArrowRight size={16} />
-          </Link>
+          </a>
         </div>
       </section>
     </main>

@@ -7,7 +7,6 @@ import { ForgotPasswordPage, LoginPage, RegisterPage } from "./pages/AuthPages";
 import { BlogDetailPage, BlogListPage } from "./pages/BlogPages";
 import { CartPage } from "./pages/CartPage";
 import { CheckoutPage } from "./pages/CheckoutPage";
-import { ConsultPage } from "./pages/ConsultPage";
 import { ExplorePage } from "./pages/ExplorePage";
 import { HomePage } from "./pages/HomePage";
 import { OrderSuccessPage } from "./pages/OrderDetailPage";
@@ -43,7 +42,6 @@ export default function App() {
               <Route path="blog" element={<BlogListPage />} />
               <Route path="blog/:slug" element={<BlogDetailPage />} />
               <Route path="policies" element={<PoliciesPage />} />
-              <Route path="consult" element={<ConsultPage />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
               <Route path="forgot-password" element={<ForgotPasswordPage />} />

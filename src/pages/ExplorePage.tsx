@@ -11,7 +11,7 @@ export function ExplorePage() {
   const [products] = useState<Product[]>(mockData.products as unknown as Product[]);
   const { add } = useCart();
 
-  const featuredSpotlight = products.find((p) => p.name.includes("Foam")) || products[0];
+  const featuredSpotlight = products[0];
   const section1Products = products.slice(6, 9);
   const section2Products = products.slice(0, 6);
   const section3Products = products.slice(2, 8);
@@ -116,7 +116,7 @@ export function ExplorePage() {
             <Link to="/products" className="hero-btn primary">
               Xem tất cả <ArrowRight size={18} />
             </Link>
-            <Link to="/consult" className="hero-btn secondary">
+            <Link to="/products" className="hero-btn secondary">
               Nhận tư vấn ngay
             </Link>
           </div>

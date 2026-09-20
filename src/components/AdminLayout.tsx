@@ -1,16 +1,13 @@
-import { BookOpen, Boxes, FileText, LayoutDashboard, PackageCheck, Percent, Sparkles, Star, ArrowLeft, LogOut } from "lucide-react";
+import { BookOpen, Boxes, FileText, LayoutDashboard, Star, ArrowLeft, LogOut } from "lucide-react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { logout } from "../services/authService";
 
 const links = [
-  ["/admin", "Tổng Quan Studio", LayoutDashboard],
-  ["/admin/products", "Quản Lý Sản Phẩm", Boxes],
-  ["/admin/categories", "Danh Mục Terrarium", FileText],
-  ["/admin/orders", "Xử Lý Đơn Hàng", PackageCheck],
-  ["/admin/vouchers", "Mã Giảm Giá & Voucher", Percent],
-  ["/admin/reviews", "Duyệt Đánh Giá", Star],
-  ["/admin/content", "Blog & Chính Sách", BookOpen],
-  ["/admin/rag", "RAG / Knowledge AI", Sparkles],
+  ["/admin", "Tổng quan Greenify", LayoutDashboard],
+  ["/admin/products", "Quản lý sản phẩm", Boxes],
+  ["/admin/categories", "Danh mục Terrarium", FileText],
+  ["/admin/content", "Blog & Chính sách", BookOpen],
+  ["/admin/reviews", "Duyệt đánh giá", Star],
 ] as const;
 
 export function AdminLayout() {

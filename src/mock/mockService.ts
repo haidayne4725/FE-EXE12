@@ -103,23 +103,25 @@ export function handleMockRequest(url: string, method: string, data?: any, param
 
   // 2. ADMIN STATS
   if (cleanUrl === "/api/admin/stats" && reqMethod === "GET") {
-    const productsCount = db.products.length;
-    const categoriesCount = db.categories.length;
-    const ordersCount = db.orders.length;
-    const pendingReviewsCount = db.reviews.filter((r: Review) => !r.approved).length;
-    const lowStockCount = db.products.filter((p: Product) => p.inventory <= 3).length;
-    const totalRevenue = db.orders
-      .filter((o: Order) => o.paymentStatus === "PAID" || o.status === "DELIVERED")
-      .reduce((sum: number, o: Order) => sum + (o.total || 0), 0);
+    const productsCount = db.products && Array.isArray(db.products) ? db.products.length : 124;
+    const categoriesCount = db.categories && Array.isArray(db.categories) ? db.categories.length : 12;
+    const ordersCount = db.orders && Array.isArray(db.orders) ? db.orders.length : 124;
+    const pendingReviewsCount = db.reviews && Array.isArray(db.reviews) ? db.reviews.filter((r: Review) => !r.approved).length : 178;
+    const lowStockCount = db.products && Array.isArray(db.products) ? db.products.filter((p: Product) => (p.inventory ?? 10) <= 3).length : 178;
+    const totalRevenue = db.orders && Array.isArray(db.orders)
+      ? db.orders
+          .filter((o: Order) => o.paymentStatus === "PAID" || o.status === "DELIVERED")
+          .reduce((sum: number, o: Order) => sum + (o.total || 0), 0)
+      : 28420000;
 
     return wrap({
-      products: productsCount,
-      categories: categoriesCount,
-      customers: db.users.length + 16,
-      orders: ordersCount,
-      pendingReviews: pendingReviewsCount,
-      lowStockProducts: lowStockCount,
-      revenue: totalRevenue || db.stats.revenue,
+      products: productsCount || 124,
+      categories: categoriesCount || 12,
+      customers: (db.users && Array.isArray(db.users) ? db.users.length : 80) + 16,
+      orders: ordersCount || 124,
+      pendingReviews: pendingReviewsCount || 178,
+      lowStockProducts: lowStockCount || 178,
+      revenue: totalRevenue || 28420000,
     });
   }
 
