@@ -1,29 +1,45 @@
 /* GREENIFY DESIGN SYSTEM TOKENS */
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Great+Vibes&display=swap');
 
 :root {
   /* Brand Primary & Secondary Palette */
-  --greenify-main-color: #38442D;
-  --greenify-sub-color: #2D3724;
+  --greenify-main-color: #3D4A33;
+  --greenify-sub-color: #303C28;
   --greenify-sub-color-2: #48573A;
   --greenify-icon: #5F6D52;
-  --greenify-stroke-bottom: #788D65;
+  --greenify-stroke-bottom: #96D35E;
   --greenify-frame-2: #D6DECD;
-  --greenify-bg: #F6F7F3;
+  --greenify-bg: #F3F6F5;
   --greenify-frame-1: #FFFFFF;
   --greenify-bottom-1: #FAFFF1;
-  --greenify-bottom-2: #637258;
+  --greenify-bottom-2: #23331F;
   --greenify-mask: #212A1A;
+  --greenify-add-to-cart: #0A4103;
   
   /* Text & Neutral Shades */
   --greenify-base-black: #1A2118;
-  --greenify-location-rate: #5C6556;
-  --greenify-sub-title: #8C9685;
+  --greenify-location-rate: #6B6B6B;
+  --greenify-sub-title: #A5A5A5;
   --greenify-text-light: #70756B;
+
+  /* Admin & UI Extended Palette */
+  --greenify-panel-bg: #FFFFFF;
+  --greenify-stat-icon-bg: #EEF2EB;
+  --greenify-stat-icon-color: #47553E;
+  --greenify-text-dark: #1C2518;
+  --greenify-text-muted: #66705E;
+  --greenify-text-secondary: #7B8672;
+  --greenify-border-light: #E2E8DC;
+  --greenify-border-soft: #E5EADF;
+  --greenify-hover-bg: #FAFCF9;
+  --greenify-input-bg: #F9FAF8;
+  --greenify-input-label: #252E1F;
+  --greenify-positive: #166534;
+  --greenify-negative: #991B1B;
   
   /* Accents & Special States */
   --greenify-rate-icon: #F3CB4B;
-  --greenify-discount: #D93636;
+  --greenify-discount: #FF0000;
   --greenify-success: #33D306;
   --greenify-warning: #EF8F4A;
   
@@ -35,8 +51,8 @@
   
   /* Typography & Shadows */
   --font-family-logo: 'Great Vibes', cursive;
-  --font-family-sans: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-family-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --font-family-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-heading: 'Be Vietnam Pro', sans-serif;
   
   --shadow-sm: 0 2px 8px rgba(56, 68, 45, 0.06);
   --shadow-md: 0 4px 16px rgba(56, 68, 45, 0.1);
